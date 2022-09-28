@@ -1,0 +1,132 @@
+'\" t
+.\"     Title: ocf_linbit_drbd-attr
+.\"    Author: LINBIT HA Solutions GmbH
+.\" Generator: DocBook XSL Stylesheets v1.79.1 <http://docbook.sf.net/>
+.\"      Date: 09/28/2020
+.\"    Manual: OCF resource agents
+.\"    Source: drbd-pacemaker 9.15.0
+.\"  Language: English
+.\"
+.TH "OCF_LINBIT_DRBD\-ATT" "7" "09/28/2020" "drbd-pacemaker 9.15.0" "OCF resource agents"
+.\" -----------------------------------------------------------------
+.\" * Define some portability stuff
+.\" -----------------------------------------------------------------
+.\" ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+.\" http://bugs.debian.org/507673
+.\" http://lists.gnu.org/archive/html/groff/2009-02/msg00013.html
+.\" ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+.ie \n(.g .ds Aq \(aq
+.el       .ds Aq '
+.\" -----------------------------------------------------------------
+.\" * set default formatting
+.\" -----------------------------------------------------------------
+.\" disable hyphenation
+.nh
+.\" disable justification (adjust text to left margin only)
+.ad l
+.\" -----------------------------------------------------------------
+.\" * MAIN CONTENT STARTS HERE *
+.\" -----------------------------------------------------------------
+.SH "NAME"
+ocf_linbit_drbd-attr \- import DRBD state change events as transient node attributes
+.SH "SYNOPSIS"
+.HP \w'\fBdrbd\-attr\fR\ 'u
+\fBdrbd\-attr\fR [start | stop | monitor | meta\-data | validate\-all]
+.SH "DESCRIPTION"
+.PP
+This listens for DRBD state change events, and sets or deletes transient node attributes based on the "promotion_score" and "may_promote" values as presented by the DRBD events2 interface\&.
+.PP
+Optionally using a dampening delay, see attrd_updater for details\&.
+.PP
+To be used as a clone on all DRBD nodes\&. The idea is to start DRBD outside of pacemaker, use DRBD auto\-promote, and add location constraints for the Filesystem or other resource agents which are using DRBD\&.
+.SH "SUPPORTED PARAMETERS"
+.PP
+\fBdampening_delay\fR
+.RS 4
+To be used as dampening delay in attrd_updater\&.
+.sp
+(optional, integer, default
+5)
+.RE
+.PP
+\fBattr_name_prefix\fR
+.RS 4
+The attributes will be named "*prefix*\-drbd_resource_name"\&. You can chose that prefix here\&.
+.sp
+(optional, string, default "drbd\-promotion\-score")
+.RE
+.PP
+\fBrecord_event_details\fR
+.RS 4
+It may be convenient to know which event lead to the current score\&. This setting toggles the recording of the event\&. The attributes will be named "*prefix*:event\-details\-drbd_resource_name"\&.
+.sp
+(optional, boolean, default
+false)
+.RE
+.SH "SUPPORTED ACTIONS"
+.PP
+This resource agent supports the following actions (operations):
+.PP
+\fBstart\fR
+.RS 4
+Starts the resource\&. Suggested minimum timeout: 20s\&.
+.RE
+.PP
+\fBstop\fR
+.RS 4
+Stops the resource\&. Suggested minimum timeout: 20s\&.
+.RE
+.PP
+\fBmonitor\fR
+.RS 4
+Performs a detailed status check\&. Suggested minimum timeout: 20s\&. Suggested interval: 60s\&.
+.RE
+.PP
+\fBvalidate\-all\fR
+.RS 4
+Performs a validation of the resource configuration\&. Suggested minimum timeout: 20s\&.
+.RE
+.PP
+\fBmeta\-data\fR
+.RS 4
+Retrieves resource agent metadata (internal use only)\&. Suggested minimum timeout: 5s\&.
+.RE
+.SH "EXAMPLE CRM SHELL"
+.PP
+The following is an example configuration for a drbd\-attr resource using the
+\fBcrm\fR(8)
+shell:
+.sp
+.if n \{\
+.RS 4
+.\}
+.nf
+primitive p_drbd\-attr ocf:linbit:drbd\-attr \e
+  op monitor timeout="20s" interval="60s" depth="0" 
+.fi
+.if n \{\
+.RE
+.\}
+.SH "EXAMPLE PCS"
+.PP
+The following is an example configuration for a drbd\-attr resource using
+\fBpcs\fR(8)
+.sp
+.if n \{\
+.RS 4
+.\}
+.nf
+pcs resource create p_drbd\-attr ocf:linbit:drbd\-attr \e
+  op monitor timeout="20s" interval="60s" depth="0" 
+.fi
+.if n \{\
+.RE
+.\}
+.SH "SEE ALSO"
+.PP
+\m[blue]\fB\%https://docs.linbit.com/\fR\m[],
+\m[blue]\fB\%https://clusterlabs.org/\fR\m[],
+\m[blue]\fB\%https://www.linbit.com/drbd-community/\fR\m[]
+.SH "AUTHORS"
+.PP
+\fBLINBIT HA Solutions GmbH\fR

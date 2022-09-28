@@ -1,0 +1,2 @@
+Test-Command: /sbin/drbdadm dump 2>/dev/null
+Restrictions: superficial
