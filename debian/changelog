@@ -1,3 +1,9 @@
+drbd-utils (9.15.0-1deepin0) unstable; urgency=medium
+
+  * No source change upload against GCC 12.
+
+ -- Tianyu Chen <sweetyfish@deepin.org>  Thu, 19 Sep 2024 22:45:21 +0800
+
 drbd-utils (9.15.0-1) unstable; urgency=medium
 
   * New upstream version 9.15.0
